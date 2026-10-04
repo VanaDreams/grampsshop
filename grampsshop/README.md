@@ -20,7 +20,7 @@ By hand: copy this folder to `Ashita-v4beta\addons\grampsshop\`, then in game:
 
 ## Use
 
-Click the button. Drag it wherever you like; it stays where you put it.
+Click the button. To move it, drag the little `::` beside it; it stays where you put it.
 
 If you would rather not have the button, untick **Show the little shop button** in the shop window. These still work without it:
 

@@ -18,7 +18,7 @@
 
 addon.name    = 'grampsshop';
 addon.author  = 'Vanadreams';
-addon.version = '0.1.1';
+addon.version = '0.1.2';
 addon.desc    = 'Gramps Shop, Kupo! A small shop you can open anywhere on Vanadreams.';
 addon.link    = 'https://github.com/VanaDreams/grampsshop';
 
@@ -201,10 +201,28 @@ local function pop_style()
 end
 
 -- the little button that opens the shop, so nobody has to type a command
+-- Where the button sits until you drag it somewhere else. Up to 0.1.1 it sat at 60,60 and could
+-- not be dragged (the button filled its whole window, so there was nothing to take hold of).
+-- Stacey, 4 Oct 2026: an inch lower and half an inch further left - about 70 px to the inch on
+-- her screen - and make it movable.
+local BUTTON_HOME     = { 25, 130 };
+local OLD_BUTTON_HOME = { 60, 60 };
+local send_button_home = false;     -- found still at the old spot: move it on the next frame
+
 local function draw_button()
     local flags = bit.bor(ImGuiWindowFlags_NoTitleBar, ImGuiWindowFlags_AlwaysAutoResize,
                           ImGuiWindowFlags_NoScrollbar, ImGuiWindowFlags_NoCollapse);
+    imgui.SetNextWindowPos(BUTTON_HOME, send_button_home and ImGuiCond_Always or ImGuiCond_FirstUseEver);
+    send_button_home = false;
     if imgui.Begin('##grampsshop_button', cfg.show_button, flags) then
+        -- Nobody chose the old spot, because nobody could move the button: treat it as "not placed yet".
+        local x, y = imgui.GetWindowPos();
+        if x == OLD_BUTTON_HOME[1] and y == OLD_BUTTON_HOME[2] then send_button_home = true; end
+
+        -- the handle: plain text is not a button, so pressing here drags the window
+        imgui.TextDisabled('::');
+        if imgui.IsItemHovered() then imgui.SetTooltip('Drag here to move the button'); end
+        imgui.SameLine();
         if imgui.Button(SHOP_NAME) then
             cfg.shop_open[1] = not cfg.shop_open[1];
             settings.save();
