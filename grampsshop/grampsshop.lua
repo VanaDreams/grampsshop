@@ -18,7 +18,7 @@
 
 addon.name    = 'grampsshop';
 addon.author  = 'Vanadreams';
-addon.version = '0.1.0';
+addon.version = '0.1.1';
 addon.desc    = 'Gramps Shop, Kupo! A small shop you can open anywhere on Vanadreams.';
 addon.link    = 'https://github.com/VanaDreams/grampsshop';
 
@@ -154,6 +154,9 @@ end
 ashita.events.register('text_in', 'grampsshop_text_in', function (e)
     if e.injected then return; end
     local text = e.message_modified or e.message or '';
+    -- Your own client echoes the line the Buy button sent ("Terry : !gramps 4172 1 1000").
+    -- Nobody else ever sees it; keep it out of your own chat log too.
+    if text:find('!gramps %d+ %d+ %d+') then e.blocked = true; return; end
     local at = text:find('Gramps : ', 1, true);
     if not at then return; end
     shop.reply = text:sub(at):gsub('[%z\1-\31\127]', '');
