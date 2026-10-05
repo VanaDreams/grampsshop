@@ -19,4 +19,27 @@ return {
     { id = 4172, price = 1000 },   -- Reraiser
     { id = 4165, price = 700 },    -- Pot of Silent Oil
     { id = 4164, price = 700 },    -- Pinch of Prism Powder
+
+    -- Ninja tools, all at 50 gil (Amalasanda sells these for 40 and 124).
+    { id = 1161, price = 50 },     -- Uchitake
+    { id = 1164, price = 50 },     -- Tsurara
+    { id = 1167, price = 50 },     -- Kawahori-ogi
+    { id = 1170, price = 50 },     -- Makibishi
+    { id = 1173, price = 50 },     -- Hiraishin
+    { id = 1176, price = 50 },     -- Mizu-deppo
+    { id = 1179, price = 50 },     -- Shihei
+    { id = 1182, price = 50 },     -- Jusatsu
+    { id = 1185, price = 50 },     -- Kaginawa
+    { id = 1188, price = 50 },     -- Sairui-ran
+    { id = 1191, price = 50 },     -- Kodoku
+    { id = 1194, price = 50 },     -- Shinobi-tabi
+
+    -- Ninja tools no NPC sells, priced by Stacey at 50.
+    { id = 2553, price = 50 },     -- Sanjaku-tenugui
+    { id = 2555, price = 50 },     -- Soshi
+    { id = 2642, price = 50 },     -- Kabenro
+    { id = 2643, price = 50 },     -- Jinko
+    { id = 2644, price = 50 },     -- Ryuno
+    { id = 2970, price = 50 },     -- Mokujin
+    { id = 8804, price = 50 },     -- Furusumi
 };
