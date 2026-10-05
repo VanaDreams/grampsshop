@@ -18,7 +18,7 @@
 
 addon.name    = 'grampsshop';
 addon.author  = 'Vanadreams';
-addon.version = '0.1.2';
+addon.version = '0.1.3';
 addon.desc    = 'Gramps Shop, Kupo! A small shop you can open anywhere on Vanadreams.';
 addon.link    = 'https://github.com/VanaDreams/grampsshop';
 
