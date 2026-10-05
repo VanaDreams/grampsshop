@@ -19,5 +19,5 @@ return {
     { id = 4172, price = 1000 },   -- Reraiser
     { id = 4165, price = 700 },    -- Pot of Silent Oil
     { id = 4164, price = 700 },    -- Pinch of Prism Powder
-    { id = 3509, price = 5000 },   -- Plate of Heavy Metal
+    { id = 5910, price = 5000 },   -- Heavy Metal Pouch
 };
