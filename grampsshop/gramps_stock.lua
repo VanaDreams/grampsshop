@@ -42,4 +42,15 @@ return {
     { id = 2644, price = 50 },     -- Ryuno
     { id = 2970, price = 50 },     -- Mokujin
     { id = 8804, price = 50 },     -- Furusumi
+
+    -- Tools, at the NPC price (Bastok Mines, San d'Oria and Al Zahbi sell these).
+    { id = 605,  price = 200 },    -- Pickaxe
+    { id = 1021, price = 500 },    -- Hatchet
+    { id = 1020, price = 300 },    -- Sickle
+
+    -- Level 1 ammunition, 10 gil each.
+    { id = 17296, price = 10 },    -- Pebble (throwing)
+    { id = 17318, price = 10 },    -- Wooden Arrow (ranged)
+    { id = 17336, price = 10 },    -- Crossbow Bolt (marksmanship)
+    { id = 17343, price = 10 },    -- Bronze Bullet (marksmanship)
 };
