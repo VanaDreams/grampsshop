@@ -18,7 +18,7 @@
 
 addon.name    = 'grampsshop';
 addon.author  = 'Vanadreams';
-addon.version = '0.1.7';
+addon.version = '0.1.8';
 addon.desc    = 'Gramps Shop, Kupo! A small shop you can open anywhere on Vanadreams.';
 addon.link    = 'https://github.com/VanaDreams/grampsshop';
 
@@ -76,12 +76,39 @@ local shop = {
 local function now() return os.clock(); end
 local function say(msg) print(('\30\08[Gramps]\30\01 %s'):format(msg)); end
 
-local function check_server()
+-- Every way a player reaches Vanadreams: its public name (or any fairywitch name), the Tailscale
+-- address the launcher switches to when a network blocks the game's ports, and the home network.
+-- Kept here rather than in the settings file, so a list saved by an older version never hides one.
+local VANADREAMS_NAMES = T{ 'vanadreams', 'fairywitch' };
+local VANADREAMS_ADDRS = T{ '100.114.52.41', '192.168.0.19' };
+local VANADREAMS_HOST  = 'vanadreams.fairywitch.ca';
+
+local function boot_server()
     local cmd = '';
     pcall(function() cmd = AshitaCore:GetConfigurationManager():GetString('boot', 'ashita.boot', 'command') or ''; end);
     cmd = cmd:lower();
-    for _, name in ipairs(cfg.servers) do
-        if #name > 0 and cmd:find(name:lower(), 1, true) then shop.allowed = true; shop.allowed_reason = ''; return true; end
+    return cmd, (cmd:match('%-%-server%s+"([^"]+)"') or cmd:match('%-%-server%s+(%S+)') or '');
+end
+
+local function resolve(host)
+    local ok, ip = pcall(function() return require('socket').dns.toip(host); end);
+    return (ok and type(ip) == 'string') and ip or nil;
+end
+
+local function check_server()
+    local cmd, server = boot_server();
+    for _, list in ipairs({ VANADREAMS_NAMES, cfg.servers or {} }) do
+        for _, name in ipairs(list) do
+            if type(name) == 'string' and #name > 0 and cmd:find(name:lower(), 1, true) then shop.allowed = true; shop.allowed_reason = ''; return true; end
+        end
+    end
+    if #server > 0 then
+        for _, addr in ipairs(VANADREAMS_ADDRS) do
+            if server == addr then shop.allowed = true; shop.allowed_reason = ''; return true; end
+        end
+        -- any other name or address for the same machine: a DNS name of the player's own, or the bare IP
+        local mine, ours = resolve(server), resolve(VANADREAMS_HOST);
+        if mine and ours and mine == ours then shop.allowed = true; shop.allowed_reason = ''; return true; end
     end
     shop.allowed = false;
     shop.allowed_reason = 'Gramps only keeps shop on Vanadreams, kupo.';
