@@ -18,7 +18,7 @@
 
 addon.name    = 'grampsshop';
 addon.author  = 'Vanadreams';
-addon.version = '0.1.8';
+addon.version = '0.1.9';
 addon.desc    = 'Gramps Shop, Kupo! A small shop you can open anywhere on Vanadreams.';
 addon.link    = 'https://github.com/VanaDreams/grampsshop';
 
@@ -51,7 +51,7 @@ do
         for _, line in ipairs(list) do
             local id, price = tonumber(line.id), tonumber(line.price);
             if id and price and id > 0 and price >= 0 then
-                stock:append({ id = math.floor(id), price = math.floor(price) });
+                stock:append({ id = math.floor(id), price = math.floor(price), name = type(line.name) == 'string' and line.name or nil, stack = tonumber(line.stack) });
             end
         end
         if #stock == 0 then stock_error = 'gramps_stock.lua has no items in it.'; end
@@ -123,12 +123,29 @@ end
 -- ---------------------------------------------------------------------------
 -- what the game knows: item names, gil, bag space
 -- ---------------------------------------------------------------------------
-local function item_info(id)
-    local r = AshitaCore:GetResourceManager():GetItemById(id);
-    if not r then return { name = 'item ' .. tostring(id), text = '', stack = 1 }; end
-    local stack = tonumber(r.StackSize) or 1;
-    if stack < 1 then stack = 1; end
-    return { name = r.Name[1] or ('item ' .. tostring(id)), text = (r.Description and r.Description[1]) or '', stack = stack };
+-- The game's own name for an item, or nil when its resources don't have one to give.
+local function game_string(list)
+    if list == nil then return nil; end
+    for _, i in ipairs({ 1, 0 }) do
+        local ok, v = pcall(function() return list[i]; end);
+        if ok and v ~= nil then
+            v = tostring(v);
+            if #v > 0 then return v; end
+        end
+    end
+    return nil;
+end
+
+-- Name, description and how many at a time for a shelf line. The name falls back to the one written
+-- in gramps_stock.lua, so the shelf reads the same on every install; how many comes only from there.
+local function item_info(line)
+    local id = line.id;
+    local fallback = line.name or ('item ' .. tostring(id));
+    local r = nil;
+    pcall(function() r = AshitaCore:GetResourceManager():GetItemById(id); end);
+    local stack = math.max(1, math.floor(line.stack or 1));   -- one at a time unless the shelf line says otherwise
+    if not r then return { name = fallback, text = '', stack = stack }; end
+    return { name = game_string(r.Name) or fallback, text = game_string(r.Description) or '', stack = stack };
 end
 
 local function my_gil()
@@ -157,7 +174,7 @@ local function buy(line, quantity)
     if not logged_in() then shop.note = 'Log in first, kupo.'; return; end
     if now() - shop.last_buy < BUY_PAUSE then return; end
 
-    local info  = item_info(line.id);
+    local info  = item_info(line);
     quantity    = math.max(1, math.min(quantity, info.stack));
     local total = line.price * quantity;
 
@@ -277,7 +294,7 @@ local function draw_shop()
             if shop.selected > #stock then shop.selected = 1; end
             imgui.BeginChild('grampsshop_shelf', { 0, 150 }, ImGuiChildFlags_Borders);
             for i, line in ipairs(stock) do
-                local info = item_info(line.id);
+                local info = item_info(line);
                 if imgui.Selectable(('%s   -   %s gil##%d'):format(info.name, commas(line.price), i), i == shop.selected) then
                     shop.selected = i;
                     shop.quantity[1] = 1;
@@ -288,7 +305,7 @@ local function draw_shop()
 
             -- the item in hand
             local line = stock[shop.selected];
-            local info = item_info(line.id);
+            local info = item_info(line);
             imgui.TextColored(rgba(C.gold, 1.0), info.name);
             if info.text ~= '' then imgui.TextWrapped(info.text); end
             imgui.Separator();
