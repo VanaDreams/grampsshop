@@ -6,7 +6,7 @@
         { id = <item id>, price = <gil for ONE>, name = "<the item's name>" },
 
     Items sell one at a time. Add stack = <how many> to a line to let players buy up to that
-    many in one go (only the ammunition does). The description comes from the game; the
+    many in one go (the ammunition, Shihei and the gathering tools do). The description comes from the game; the
     name does too, and the name written here is what the shop shows when the game has none.
     To add an item, add a line. To change a price, change the number. To take an item off the
     shelf, delete its line (or put -- in front of it).
@@ -22,33 +22,13 @@ return {
     { id = 4165, price = 700, name = "Pot of Silent Oil" },
     { id = 4164, price = 700, name = "Pinch of Prism Powder" },
 
-    -- Ninja tools, all at 50 gil (Amalasanda sells these for 40 and 124).
-    { id = 1161, price = 50, name = "Uchitake" },
-    { id = 1164, price = 50, name = "Tsurara" },
-    { id = 1167, price = 50, name = "Kawahori-ogi" },
-    { id = 1170, price = 50, name = "Makibishi" },
-    { id = 1173, price = 50, name = "Hiraishin" },
-    { id = 1176, price = 50, name = "Mizu-deppo" },
-    { id = 1179, price = 50, name = "Shihei" },
-    { id = 1182, price = 50, name = "Jusatsu" },
-    { id = 1185, price = 50, name = "Kaginawa" },
-    { id = 1188, price = 50, name = "Sairui-ran" },
-    { id = 1191, price = 50, name = "Kodoku" },
-    { id = 1194, price = 50, name = "Shinobi-tabi" },
+    -- Ninja tools: only Shihei, 10 gil each, up to a stack of 99 (Ferrin, 15 Oct 2026).
+    { id = 1179, price = 10, name = "Shihei", stack = 99 },
 
-    -- Ninja tools no NPC sells, priced by Stacey at 50.
-    { id = 2553, price = 50, name = "Sanjaku-tenugui" },
-    { id = 2555, price = 50, name = "Soshi" },
-    { id = 2642, price = 50, name = "Kabenro" },
-    { id = 2643, price = 50, name = "Jinko" },
-    { id = 2644, price = 50, name = "Ryuno" },
-    { id = 2970, price = 50, name = "Mokujin" },
-    { id = 8804, price = 50, name = "Furusumi" },
-
-    -- Tools, at the NPC price (Bastok Mines, San d'Oria and Al Zahbi sell these).
-    { id = 605, price = 200, name = "Pickaxe" },
-    { id = 1021, price = 500, name = "Hatchet" },
-    { id = 1020, price = 300, name = "Sickle" },
+    -- Gathering tools, 25 gil each, up to a stack of 12 (Ferrin, 15 Oct 2026).
+    { id = 605, price = 25, name = "Pickaxe", stack = 12 },
+    { id = 1021, price = 25, name = "Hatchet", stack = 12 },
+    { id = 1020, price = 25, name = "Sickle", stack = 12 },
 
     -- Level 1 ammunition, 10 gil each.
     { id = 17296, price = 10, name = "Pebble", stack = 99 },    -- (throwing)
