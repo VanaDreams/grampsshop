@@ -33,7 +33,7 @@ If you would rather not have the button, untick **Show the little shop button** 
 
 ## What Gramps sells
 
-The stock and the prices are the list in `gramps_stock.lua`, beside the addon. One line per item: the item's id and the price in gil for one. The game supplies the name, the description and how many stack.
+The stock and the prices are the list in `gramps_stock.lua`, beside the addon. One line per item: the item's id, the price in gil for one, its name, and (for things bought in bulk) `stack = <how many>`, the most a player can buy in one go. The game supplies the description.
 
 When the list changes, press Reinstall on the launcher's Addons page to get the new one.
 
