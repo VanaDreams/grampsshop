@@ -18,7 +18,7 @@
 
 addon.name    = 'grampsshop';
 addon.author  = 'Vanadreams';
-addon.version = '0.1.10';
+addon.version = '0.1.11';
 addon.desc    = 'Gramps Shop, Kupo! A small shop you can open anywhere on Vanadreams.';
 addon.link    = 'https://github.com/VanaDreams/grampsshop';
 
@@ -292,7 +292,8 @@ local function draw_shop()
 
             -- the shelf
             if shop.selected > #stock then shop.selected = 1; end
-            imgui.BeginChild('grampsshop_shelf', { 0, 150 }, ImGuiChildFlags_Borders);
+            -- tall enough for the whole shelf at the usual text size, so nobody has to scroll
+            imgui.BeginChild('grampsshop_shelf', { 0, 290 }, ImGuiChildFlags_Borders);
             for i, line in ipairs(stock) do
                 local info = item_info(line);
                 if imgui.Selectable(('%s   -   %s gil##%d'):format(info.name, commas(line.price), i), i == shop.selected) then
