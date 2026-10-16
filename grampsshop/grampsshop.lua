@@ -18,12 +18,13 @@
 
 addon.name    = 'grampsshop';
 addon.author  = 'Vanadreams';
-addon.version = '0.1.12';
+addon.version = '0.1.13';
 addon.desc    = 'Gramps Shop, Kupo! A small shop you can open anywhere on Vanadreams.';
 addon.link    = 'https://github.com/VanaDreams/grampsshop';
 
 require('common');
 local imgui    = require('imgui');
+local vd       = require('vdstyle');
 local settings = require('settings');
 
 local SHOP_NAME = 'Gramps Shop, Kupo!';
@@ -221,29 +222,6 @@ local C = {
 };
 local function rgba(c, a) return { c[1], c[2], c[3], a }; end
 
-local STYLE_COLOURS = 14;
-local function push_style()
-    imgui.PushStyleVar(ImGuiStyleVar_WindowRounding, 6.0);
-    imgui.PushStyleColor(ImGuiCol_WindowBg,      rgba(C.night, 0.95));
-    imgui.PushStyleColor(ImGuiCol_TitleBg,       rgba(C.plum, 1.0));
-    imgui.PushStyleColor(ImGuiCol_TitleBgActive, rgba(C.velvet, 1.0));
-    imgui.PushStyleColor(ImGuiCol_Border,        rgba(C.gold, 0.35));
-    imgui.PushStyleColor(ImGuiCol_FrameBg,       rgba(C.velvet, 0.60));
-    imgui.PushStyleColor(ImGuiCol_PopupBg,       rgba(C.night, 0.92));
-    imgui.PushStyleColor(ImGuiCol_Button,        rgba(C.velvet, 0.85));
-    imgui.PushStyleColor(ImGuiCol_ButtonHovered, rgba(C.gold, 0.60));
-    imgui.PushStyleColor(ImGuiCol_ButtonActive,  rgba(C.gold, 0.85));
-    imgui.PushStyleColor(ImGuiCol_Header,        rgba(C.velvet, 0.85));
-    imgui.PushStyleColor(ImGuiCol_HeaderHovered, rgba(C.gold, 0.45));
-    imgui.PushStyleColor(ImGuiCol_Separator,     rgba(C.gold, 0.35));
-    imgui.PushStyleColor(ImGuiCol_Text,          rgba(C.cream, 1.0));
-    imgui.PushStyleColor(ImGuiCol_TextDisabled,  rgba(C.soft, 0.75));
-end
-local function pop_style()
-    imgui.PopStyleColor(STYLE_COLOURS);
-    imgui.PopStyleVar(1);
-end
-
 -- the little button that opens the shop, so nobody has to type a command
 -- Where the button sits until you drag it somewhere else. Up to 0.1.1 it sat at 60,60 and could
 -- not be dragged (the button filled its whole window, so there was nothing to take hold of).
@@ -258,7 +236,7 @@ local function draw_button()
                           ImGuiWindowFlags_NoScrollbar, ImGuiWindowFlags_NoCollapse);
     imgui.SetNextWindowPos(BUTTON_HOME, send_button_home and ImGuiCond_Always or ImGuiCond_FirstUseEver);
     send_button_home = false;
-    if imgui.Begin('##grampsshop_button', cfg.show_button, flags) then
+    if vd.Begin('##grampsshop_button', cfg.show_button, flags) then
         -- Nobody chose the old spot, because nobody could move the button: treat it as "not placed yet".
         local x, y = imgui.GetWindowPos();
         if x == OLD_BUTTON_HOME[1] and y == OLD_BUTTON_HOME[2] then send_button_home = true; end
@@ -267,18 +245,18 @@ local function draw_button()
         imgui.TextDisabled('::');
         if imgui.IsItemHovered() then imgui.SetTooltip('Drag here to move the button'); end
         imgui.SameLine();
-        if imgui.Button(SHOP_NAME) then
+        if vd.Button(SHOP_NAME, nil, true) then
             cfg.shop_open[1] = not cfg.shop_open[1];
             settings.save();
         end
     end
-    imgui.End();
+    vd.End();
 end
 
 local function draw_shop()
     -- Height 0 every frame: the window always grows to fit the whole shop, so it never scrolls.
     imgui.SetNextWindowSize({ 380, 0 }, ImGuiCond_Always);
-    if imgui.Begin(SHOP_NAME, cfg.shop_open) then
+    if vd.Begin(SHOP_NAME, cfg.shop_open) then
         if stock_error ~= '' then
             imgui.TextWrapped(stock_error);
         elseif not shop.allowed then
@@ -297,7 +275,7 @@ local function draw_shop()
             imgui.BeginChild('grampsshop_shelf', { 0, 310 }, ImGuiChildFlags_Borders);
             for i, line in ipairs(stock) do
                 local info = item_info(line);
-                if imgui.Selectable(('%s   -   %s gil##%d'):format(info.name, commas(line.price), i), i == shop.selected) then
+                if vd.Selectable(('%s   -   %s gil##%d'):format(info.name, commas(line.price), i), i == shop.selected) then
                     shop.selected = i;
                     shop.quantity[1] = 1;
                     shop.note = '';
@@ -328,7 +306,7 @@ local function draw_shop()
             local total = line.price * shop.quantity[1];
             imgui.Text(('Total: %s gil'):format(commas(total)));
             imgui.SameLine(imgui.GetWindowWidth() - 110);
-            if imgui.Button('Buy', { 96, 24 }) then buy(line, shop.quantity[1]); end
+            if vd.Button('Buy', { 96, 24 }, true) then buy(line, shop.quantity[1]); end
 
             if shop.reply ~= '' then
                 imgui.TextColored(rgba(C.soft, 1.0), shop.reply);
@@ -340,7 +318,7 @@ local function draw_shop()
         if imgui.Checkbox('Show the little shop button', cfg.show_button) then settings.save(); end
         if not cfg.show_button[1] then imgui.TextDisabled('Type /gramps to open the shop without it.'); end
     end
-    imgui.End();
+    vd.End();
 end
 
 local was_open, had_button = cfg.shop_open[1], cfg.show_button[1];
@@ -350,10 +328,8 @@ ashita.events.register('d3d_present', 'grampsshop_present', function ()
     if not logged_in() then return; end
     if not cfg.shop_open[1] and not cfg.show_button[1] then return; end
 
-    push_style();
     if cfg.show_button[1] then draw_button(); end
     if cfg.shop_open[1] then draw_shop(); end
-    pop_style();
 
     -- the window's own close button changes these; remember the change
     if cfg.shop_open[1] ~= was_open or cfg.show_button[1] ~= had_button then

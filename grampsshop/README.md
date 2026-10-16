@@ -44,3 +44,5 @@ The addon is the shop. When you press Buy it sends one line to the Vanadreams se
 ## Settings
 
 Kept per character by Ashita's settings library under `config\addons\grampsshop\`.
+
+The shop window has a **see-through / solid** switch in its title bar, beside the moon; the choice is remembered.
