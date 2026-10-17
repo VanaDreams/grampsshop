@@ -22,6 +22,9 @@ return {
     { id = 4165, price = 700, name = "Pot of Silent Oil" },
     { id = 4164, price = 700, name = "Pinch of Prism Powder" },
 
+    -- Ear of Millioncorn: NPC price is 48 gil (Rubahah, Benaige, Komalata), Gramps charges 20% more (Ferrin, 17 Oct 2026).
+    { id = 629, price = 58, name = "Ear of Millioncorn" },
+
     -- Ninja tools: only Shihei, 10 gil each, up to a stack of 99 (Ferrin, 15 Oct 2026).
     { id = 1179, price = 10, name = "Shihei", stack = 99 },
 
