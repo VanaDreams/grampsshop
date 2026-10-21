@@ -18,7 +18,7 @@
 
 addon.name    = 'grampsshop';
 addon.author  = 'Vanadreams';
-addon.version = '0.1.14';
+addon.version = '0.1.15';
 addon.desc    = 'Gramps Shop, Kupo! A small shop you can open anywhere on Vanadreams.';
 addon.link    = 'https://github.com/VanaDreams/grampsshop';
 
@@ -81,7 +81,7 @@ local function say(msg) print(('\30\08[Gramps]\30\01 %s'):format(msg)); end
 -- address the launcher switches to when a network blocks the game's ports, and the home network.
 -- Kept here rather than in the settings file, so a list saved by an older version never hides one.
 local VANADREAMS_NAMES = T{ 'vanadreams', 'fairywitch' };
-local VANADREAMS_ADDRS = T{ '100.93.179.33', '100.114.52.41', '192.168.0.19' };
+local VANADREAMS_ADDRS = T{ '100.93.179.33', '192.168.0.17', '100.114.52.41', '192.168.0.19' };
 local VANADREAMS_HOST  = 'vanadreams.fairywitch.ca';
 
 local function boot_server()
